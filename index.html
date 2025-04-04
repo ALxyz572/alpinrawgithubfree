@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raw GitHub Link Generator</title>
+  <link rel="icon" href="https://github.githubassets.com/favicons/favicon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    /* [SEMUA CSS TETAP - tidak diubah sedikit pun] */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      color: #333; font-family: 'Orbitron', sans-serif;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 100vh; overflow: hidden; position: relative;
+    }
+    .floating-box {
+      position: absolute; width: 20px; height: 20px;
+      background: rgba(0, 200, 255, 0.15);
+      border: 1px solid rgba(0,200,255,0.2);
+      border-radius: 5px; animation: float 10s linear infinite;
+    }
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+    h1 {
+      font-size: 32px; text-align: center;
+      color: #009688; font-family: 'Rubik Mono One', monospace;
+      margin-bottom: 5px; z-index: 2;
+    }
+    .graffiti-text {
+      font-family: 'Rubik Mono One', monospace;
+      font-size: 18px; color: #ff6f61;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+      text-align: center; margin-bottom: 20px; z-index: 2;
+    }
+    .wrapper {
+      width: 90%; max-width: 600px;
+      display: flex; flex-direction: column;
+      gap: 20px; z-index: 2;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(4px); border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+    }
+    label {
+      font-size: 14px; color: #555;
+    }
+    input[type="text"] {
+      width: 100%; padding: 12px;
+      border-radius: 10px; border: 2px solid #00bcd4;
+      background: #fff; color: #000; font-size: 14px;
+      margin-top: 8px; font-family: monospace;
+    }
+    .output {
+      margin-top: 10px; padding: 15px;
+      background: #f0f0f0; color: #00796b;
+      border: 1px dashed #00bcd4;
+      border-radius: 10px;
+      font-size: 14px;
+      word-break: break-word;
+    }
+    button {
+      margin-top: 15px; padding: 10px 20px;
+      background-color: #00bcd4; color: #fff;
+      font-weight: bold; border: none;
+      border-radius: 10px; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    button:hover {
+      background-color: #0097a7;
+    }
+    .bubble {
+      position: absolute; width: 20px; height: 20px;
+      background: rgba(0, 255, 255, 0.5);
+      border-radius: 50%; pointer-events: none;
+      animation: bubble 0.8s linear;
+    }
+    @keyframes bubble {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(4); opacity: 0; }
+    }
+    .popup {
+      position: fixed; top: 20px; right: -300px;
+      background: #00bcd4; color: white;
+      padding: 12px 24px;
+      border-radius: 10px 0 0 10px;
+      font-weight: bold;
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+      animation: slideInOut 3s forwards;
+      z-index: 99;
+    }
+    @keyframes slideInOut {
+      0% { right: -300px; opacity: 0; }
+      20% { right: 20px; opacity: 1; }
+      80% { right: 20px; opacity: 1; }
+      100% { right: -300px; opacity: 0; }
+    }
+    footer {
+      margin-top: 40px; font-size: 12px;
+      color: #666; text-align: center;
+      z-index: 2;
+      user-select: none; pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Kotak² Mengambang -->
+  <script>
+    for (let i = 0; i < 30; i++) {
+      const box = document.createElement('div');
+      box.classList.add('floating-box');
+      box.style.left = `${Math.random() * 100}%`;
+      box.style.animationDuration = `${8 + Math.random() * 5}s`;
+      document.body.appendChild(box);
+    }
+  </script>
+
+  <h1>RAW GITHUB LINK</h1>
+  <div class="graffiti-text">By Alpin Developer</div>
+
+  <div class="wrapper">
+    <div class="card">
+      <label for="githubLink">Masukkan Link GitHub:</label>
+      <input type="text" id="githubLink" placeholder="https://github.com/username/repo/blob/main/file"/>
+      <button onclick="generateRaw(event)">Generate Raw</button>
+    </div>
+
+    <div class="card">
+      <label>Link Raw GitHub:</label>
+      <div class="output" id="rawOutput">Link akan muncul di sini...</div>
+      <button onclick="copyRaw(event)">Salin Link</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Website by <b>Alpin</b>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="#2196f3" style="vertical-align: middle; margin-left: 4px;">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+      10-4.48 10-10S17.52 2 12 2zm-1 15l-4-4
+      1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/>
+    </svg>
+  </footer>
+
+  <!-- Audio Efek Suara -->
+  <audio id="bubbleSound" src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_d0b6a0aa82.mp3?filename=click-pop-110194.mp3" preload="auto"></audio>
+
+  <!-- JS -->
+  <script>
+    function playSound() {
+      const audio = document.getElementById("bubbleSound");
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    function showPopup(msg) {
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.innerText = msg;
+      document.body.appendChild(popup);
+      setTimeout(() => popup.remove(), 3000);
+    }
+
+    function addBubble(e) {
+      playSound(); // Tambah suara
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.style.left = `${e.offsetX}px`;
+      bubble.style.top = `${e.offsetY}px`;
+      e.currentTarget.appendChild(bubble);
+      setTimeout(() => bubble.remove(), 800);
+    }
+
+    function generateRaw(e) {
+      addBubble(e);
+      const input = document.getElementById("githubLink").value.trim();
+      const pattern = /^https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/blob\/(.+)$/;
+      const match = input.match(pattern);
+      if (!match) {
+        document.getElementById("rawOutput").innerText = "Format link tidak valid!";
+        return;
+      }
+      const username = match[1];
+      const repo = match[2];
+      const path = match[3];
+      const rawUrl = `https://raw.githubusercontent.com/${username}/${repo}/${path}`;
+      document.getElementById("rawOutput").innerText = rawUrl;
+      showPopup("Berhasil Raw");
+    }
+
+    function copyRaw(e) {
+      addBubble(e);
+      const output = document.getElementById("rawOutput").innerText;
+      if (output.includes("http")) {
+        navigator.clipboard.writeText(output).then(() => {
+          showPopup("Berhasil Salin");
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>
